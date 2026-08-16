@@ -375,13 +375,7 @@ if (contributionForm) {
 
       try {
 
-        const items =
-          await addContribution(data);
-
-
-        renderStats(items);
-
-        renderContributions(items);
+        await addContribution(data);
 
 
         contributionForm.reset();
