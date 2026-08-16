@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Join the collective goal of reciting 1 Crore Darood Pak before 12 Rabi ul Awwal.">
+  <title>1 Crore Darood Pak ﷺ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="pattern"></div>
+
+  <header class="nav">
+    <a class="brand" href="#">
+      <span class="brand-mark">ﷺ</span>
+      <span>Darood Pak</span>
+    </a>
+    <a class="nav-link" href="#contribute">Contribute</a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+      <div class="arabic">اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ وَعَلَىٰ آلِ مُحَمَّدٍ</div>
+      <h1>1 Crore <span>Darood Pak</span> ﷺ</h1>
+      <p class="lead">A collective goal to recite <strong>10,000,000 Darood Pak</strong> before 12 Rabi ul Awwal.</p>
+
+      <div class="goal-card">
+        <div class="goal-top">
+          <div>
+            <span class="label">DAROOD COMPLETED</span>
+            <div class="big-number" id="totalDisplay">0</div>
+          </div>
+          <div class="percentage" id="percentDisplay">0%</div>
+        </div>
+
+        <div class="progress-track" aria-label="Darood Pak goal progress">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="goal-bottom">
+          <span>Goal: <strong>10,000,000</strong></span>
+          <span>Remaining: <strong id="remainingDisplay">10,000,000</strong></span>
+        </div>
+      </div>
+
+      <div class="countdown-card">
+        <div>
+          <span class="label">TIME UNTIL 12 RABI UL AWWAL</span>
+          <h2>Every recitation counts.</h2>
+        </div>
+        <div class="countdown" id="countdown">
+          <div><strong id="days">--</strong><span>Days</span></div>
+          <div><strong id="hours">--</strong><span>Hours</span></div>
+          <div><strong id="minutes">--</strong><span>Minutes</span></div>
+          <div><strong id="seconds">--</strong><span>Seconds</span></div>
+        </div>
+      </div>
+
+      <a href="#contribute" class="primary-btn">+ Contribute Darood Pak</a>
+      <p class="small-note">No money is required. Contribute the number of Darood Pak you have recited.</p>
+    </section>
+
+    <section class="section" id="contribute">
+      <div class="section-heading">
+        <span class="eyebrow">YOUR CONTRIBUTION</span>
+        <h2>Add your Darood Pak</h2>
+        <p>Recite Darood Pak, then enter the number you completed. Your contribution will be added to the collective goal.</p>
+      </div>
+
+      <div class="contribute-grid">
+        <form class="form-card" id="contributionForm">
+          <label for="name">Name <span>(optional)</span></label>
+          <input id="name" name="name" maxlength="60" placeholder="e.g. Muhammad Ali">
+
+          <label for="count">Darood Pak recited <span>*</span></label>
+          <input id="count" name="count" type="number" min="1" max="1000000" required placeholder="e.g. 1000">
+
+          <label for="city">City <span>(optional)</span></label>
+          <input id="city" name="city" maxlength="60" placeholder="e.g. Lahore">
+
+          <button class="primary-btn full" type="submit" id="submitBtn">Add My Contribution</button>
+          <p class="form-message" id="formMessage"></p>
+          <p class="privacy">Please don't submit phone numbers, email addresses, passwords, or other private information.</p>
+        </form>
+
+        <div class="recitation-card">
+          <div class="icon">ﷺ</div>
+          <h3>Every Darood matters</h3>
+          <p>Whether you contribute 1, 10, 313, 1,000 or more, your recitation becomes part of this collective target.</p>
+          <div class="mini-stats">
+            <div><strong id="remainingMini">10,000,000</strong><span>still needed</span></div>
+            <div><strong id="contributorsMini">0</strong><span>contributions</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section recent-section">
+      <div class="section-heading">
+        <span class="eyebrow">COMMUNITY</span>
+        <h2>Recent contributions</h2>
+        <p>Names are optional. You can contribute anonymously.</p>
+      </div>
+      <div class="contributions" id="contributions">
+        <div class="empty">Loading contributions…</div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-brand">ﷺ Darood Pak Goal</div>
+    <p>A community recitation goal. May Allah accept every sincere Darood.</p>
+    <p class="footer-note">The target date for 12 Rabi ul Awwal should be confirmed locally according to the moon-sighting/calendar convention you follow.</p>
+  </footer>
+
+  <script type="module" src="script.js"></script>
+</body>
+</html>
