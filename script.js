@@ -144,7 +144,7 @@ $("contributionForm").addEventListener("submit", async (event) => {
     name: $("name").value.trim(),
     count,
     city: $("city").value.trim(),
-    createdAt: new Date().toISOString()
+createdAt: serverTimestamp()
   };
 
   try {
