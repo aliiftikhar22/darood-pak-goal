@@ -162,16 +162,32 @@ $("contributionForm").addEventListener("submit", async (event) => {
   }
 });
 
-function init() {
-  const items = getLocalContributions();
-  renderStats(items);
-  renderContributions(items);
+async function init() {
+  try {
+    const snapshot = await getDocs(
+      query(
+        collection(db, "contributions"),
+        orderBy("createdAt", "desc")
+      )
+    );
+
+    const items = snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+
+    renderStats(items);
+    renderContributions(items);
+  } catch (error) {
+    console.error("Firebase error:", error);
+    $("contributions").innerHTML =
+      `<div class="empty">Unable to load contributions.</div>`;
+  }
+
   updateCountdown();
   setInterval(updateCountdown, 1000);
-
-  if (FIREBASE_ENABLED) {
-    console.warn("Firebase mode is enabled in configuration, but the starter build currently uses the local fallback. Connect Firestore transaction logic before launch.");
-  }
 }
+
+init();
 
 init();
