@@ -19,12 +19,12 @@ const TARGET_DATE = "2026-08-25T23:59:59+05:00";
 const FIREBASE_ENABLED = false;
 
 const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT.firebasestorage.app",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyCF2EcEDt8G0iU_tv9H9A6VNil3duJIIo4",
+  authDomain: "cr-darood-pak.firebaseapp.com",
+  projectId: "cr-darood-pak",
+  storageBucket: "cr-darood-pak.firebasestorage.app",
+  messagingSenderId: "659293327215",
+  appId: "1:659293327215:web:d34c2c58a68def59d9a29a"
 };
 
 const $ = (id) => document.getElementById(id);
