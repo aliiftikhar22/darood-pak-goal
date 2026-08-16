@@ -419,47 +419,16 @@ if (contributionForm) {
    INITIALIZE WEBSITE
 ========================= */
 
-async function init() {
-
-  try {
-
-    const items =
-      await loadContributions();
-
-    renderStats(items);
-
-    renderContributions(items);
-
-  } catch (error) {
-
-    console.error(
-      "Firebase error:",
-      error
-    );
-
-    const contributions =
-      $("contributions");
-
-    if (contributions) {
-
-      contributions.innerHTML =
-        `<div class="empty">
-          Unable to load contributions.
-        </div>`;
-    }
-  }
-
+function init() {
+  watchContributions();
 
   updateCountdown();
-
 
   setInterval(
     updateCountdown,
     1000
   );
 }
-
-
 /* =========================
    START
 ========================= */
