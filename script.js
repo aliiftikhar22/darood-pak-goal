@@ -15,8 +15,7 @@ const GOAL = 10_000_000;
 // IMPORTANT: 12 Rabi ul Awwal varies by moon-sighting/calendar.
 // Set this to the locally confirmed Gregorian date/time before launch.
 // Example format: "2026-08-27T23:59:59+05:00"
-const TARGET_DATE = "2026-08-27T23:59:59+05:00";
-
+const TARGET_DATE = "2026-08-25T23:59:59+05:00";
 const FIREBASE_ENABLED = false;
 
 const firebaseConfig = {
