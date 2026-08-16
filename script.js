@@ -5,7 +5,8 @@ import {
   addDoc,
   getDocs,
   query,
-  orderBy
+  orderBy,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
