@@ -108,13 +108,19 @@ function updateCountdown() {
 }
 
 async function addContribution(data) {
-  // Firebase mode is intentionally kept as a clearly marked extension point.
-  // Import the Firebase modules in your deployed version and write to a
-  // Firestore "contributions" collection using a transaction for the total.
-  const items = getLocalContributions();
-  items.unshift(data);
-  saveLocalContributions(items);
-  return items;
+  await addDoc(collection(db, "contributions"), data);
+
+  const snapshot = await getDocs(
+    query(
+      collection(db, "contributions"),
+      orderBy("createdAt", "desc")
+    )
+  );
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
 }
 
 $("contributionForm").addEventListener("submit", async (event) => {
