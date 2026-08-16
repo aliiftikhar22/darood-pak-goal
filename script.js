@@ -4,10 +4,11 @@ import {
   getFirestore,
   collection,
   addDoc,
-  getDocs,
-  query,
-  orderBy,
-  serverTimestamp
+getDocs,
+query,
+orderBy,
+serverTimestamp,
+onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
@@ -263,31 +264,36 @@ function updateCountdown() {
 /* =========================
    LOAD CONTRIBUTIONS
 ========================= */
+function watchContributions() {
+  const contributionsQuery = query(
+    collection(db, "contributions"),
+    orderBy("createdAt", "desc")
+  );
 
-async function loadContributions() {
+  return onSnapshot(
+    contributionsQuery,
+    (snapshot) => {
+      const items = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
 
-  const snapshot =
-    await getDocs(
-      query(
-        collection(
-          db,
-          "contributions"
-        ),
-        orderBy(
-          "createdAt",
-          "desc"
-        )
-      )
-    );
+      renderStats(items);
+      renderContributions(items);
+    },
+    (error) => {
+      console.error("Firebase realtime error:", error);
 
-  return snapshot.docs.map(doc => ({
+      const contributions = $("contributions");
 
-    id: doc.id,
-
-    ...doc.data()
-
-  }));
+      if (contributions) {
+        contributions.innerHTML =
+          `<div class="empty">Unable to load contributions.</div>`;
+      }
+    }
+  );
 }
+
 
 
 /* =========================
@@ -295,16 +301,10 @@ async function loadContributions() {
 ========================= */
 
 async function addContribution(data) {
-
   await addDoc(
-    collection(
-      db,
-      "contributions"
-    ),
+    collection(db, "contributions"),
     data
   );
-
-  return await loadContributions();
 }
 
 
