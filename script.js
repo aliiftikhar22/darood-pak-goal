@@ -40,8 +40,7 @@ const db = getFirestore(app);
 // Darood Pak target is UNLIMITED.
 // No GOAL value is required.
 
-const TARGET_DATE = "2026-08-25T23:59:59+05:00";
-
+const TARGET_DATE = "2026-09-12T23:59:59+05:00";
 
 /* =========================
    HELPERS
