@@ -4,11 +4,10 @@ import {
   getFirestore,
   collection,
   addDoc,
-getDocs,
-query,
-orderBy,
-serverTimestamp,
-onSnapshot
+  query,
+  orderBy,
+  serverTimestamp,
+  onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
 
 
@@ -38,7 +37,8 @@ const db = getFirestore(app);
    SETTINGS
 ========================= */
 
-const GOAL = 10_000_000;
+// Darood Pak target is UNLIMITED.
+// No GOAL value is required.
 
 const TARGET_DATE = "2026-08-25T23:59:59+05:00";
 
@@ -47,7 +47,8 @@ const TARGET_DATE = "2026-08-25T23:59:59+05:00";
    HELPERS
 ========================= */
 
-const $ = (id) => document.getElementById(id);
+const $ = (id) =>
+  document.getElementById(id);
 
 const format = (n) =>
   Number(n).toLocaleString("en-US");
@@ -59,41 +60,41 @@ const format = (n) =>
 
 function renderStats(items) {
 
-  const total = Math.min(
-    items.reduce(
-      (sum, item) => sum + Number(item.count || 0),
-      0
-    ),
-    GOAL
-  );
-
-  const remaining = Math.max(
-    GOAL - total,
+  // Calculate the complete total from Firebase
+  const total = items.reduce(
+    (sum, item) =>
+      sum + Number(item.count || 0),
     0
   );
 
-  const percent = Math.min(
-    (total / GOAL) * 100,
-    100
-  );
 
+  // Display total Darood Pak
   $("totalDisplay").textContent =
     format(total);
 
+
+  // Unlimited target
   $("remainingDisplay").textContent =
-    format(remaining);
+    "∞";
+
 
   $("remainingMini").textContent =
-    format(remaining);
+    "∞";
 
+
+  // Number of contributions
   $("contributorsMini").textContent =
     format(items.length);
 
-  $("percentDisplay").textContent =
-    `${percent.toFixed(percent < 10 ? 1 : 0)}%`;
 
+  // Unlimited goal
+  $("percentDisplay").textContent =
+    "∞";
+
+
+  // Keep progress bar visually full
   $("progressBar").style.width =
-    `${percent}%`;
+    "100%";
 }
 
 
@@ -136,6 +137,7 @@ function renderContributions(items) {
     return;
   }
 
+
   container.innerHTML =
     items.slice(0, 12).map(item => {
 
@@ -145,13 +147,16 @@ function renderContributions(items) {
           "Anonymous"
         );
 
+
       const safeCity =
         escapeHtml(
           item.city?.trim() ||
           ""
         );
 
+
       let time = "";
+
 
       if (item.createdAt) {
 
@@ -174,6 +179,7 @@ function renderContributions(items) {
         }
       }
 
+
       return `
         <article class="contribution">
 
@@ -189,6 +195,7 @@ function renderContributions(items) {
 
           </div>
 
+
           ${
             safeCity
               ? `<div class="contribution-city">
@@ -196,6 +203,7 @@ function renderContributions(items) {
                  </div>`
               : ""
           }
+
 
           ${
             time
@@ -221,40 +229,49 @@ function updateCountdown() {
   const target =
     new Date(TARGET_DATE).getTime();
 
+
   const diff =
     Math.max(
       target - Date.now(),
       0
     );
 
+
   const days =
     Math.floor(
       diff / 86400000
     );
+
 
   const hours =
     Math.floor(
       (diff % 86400000) / 3600000
     );
 
+
   const minutes =
     Math.floor(
       (diff % 3600000) / 60000
     );
+
 
   const seconds =
     Math.floor(
       (diff % 60000) / 1000
     );
 
+
   $("days").textContent =
     String(days).padStart(2, "0");
+
 
   $("hours").textContent =
     String(hours).padStart(2, "0");
 
+
   $("minutes").textContent =
     String(minutes).padStart(2, "0");
+
 
   $("seconds").textContent =
     String(seconds).padStart(2, "0");
@@ -264,36 +281,56 @@ function updateCountdown() {
 /* =========================
    LOAD CONTRIBUTIONS
 ========================= */
+
 function watchContributions() {
-  const contributionsQuery = query(
-    collection(db, "contributions"),
-    orderBy("createdAt", "desc")
-  );
+
+  const contributionsQuery =
+    query(
+      collection(db, "contributions"),
+      orderBy("createdAt", "desc")
+    );
+
 
   return onSnapshot(
     contributionsQuery,
+
     (snapshot) => {
-      const items = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
+
+      const items =
+        snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+
 
       renderStats(items);
+
       renderContributions(items);
     },
-    (error) => {
-      console.error("Firebase realtime error:", error);
 
-      const contributions = $("contributions");
+
+    (error) => {
+
+      console.error(
+        "Firebase realtime error:",
+        error
+      );
+
+
+      const contributions =
+        $("contributions");
+
 
       if (contributions) {
+
         contributions.innerHTML =
-          `<div class="empty">Unable to load contributions.</div>`;
+          `<div class="empty">
+            Unable to load contributions.
+          </div>`;
       }
     }
   );
 }
-
 
 
 /* =========================
@@ -301,6 +338,7 @@ function watchContributions() {
 ========================= */
 
 async function addContribution(data) {
+
   await addDoc(
     collection(db, "contributions"),
     data
@@ -315,63 +353,90 @@ async function addContribution(data) {
 const contributionForm =
   $("contributionForm");
 
+
 if (contributionForm) {
 
   contributionForm.addEventListener(
     "submit",
+
     async (event) => {
 
       event.preventDefault();
+
 
       const count =
         Number(
           $("count").value
         );
 
+
       const message =
         $("formMessage");
+
 
       const button =
         $("submitBtn");
 
 
+      /* =========================
+         VALIDATE COUNT
+      ========================= */
+
+      // Unlimited contribution amount.
+      // Only zero, negative numbers,
+      // decimals and invalid values are rejected.
+
       if (
         !Number.isInteger(count) ||
-        count < 1 ||
-        count > 1_000_000
+        count < 1
       ) {
 
         message.textContent =
-          "Please enter a number between 1 and 1,000,000.";
+          "Please enter a valid whole number greater than 0.";
 
         return;
       }
 
 
-      button.disabled = true;
+      /* =========================
+         DISABLE BUTTON
+      ========================= */
+
+      button.disabled =
+        true;
+
 
       button.textContent =
         "Adding…";
 
+
       message.textContent =
         "";
 
+
+      /* =========================
+         CONTRIBUTION DATA
+      ========================= */
 
       const data = {
 
         name:
           $("name").value.trim(),
 
-        count: count,
+        count:
+          count,
 
         city:
           $("city").value.trim(),
 
         createdAt:
           serverTimestamp()
-
       };
 
+
+      /* =========================
+         SAVE TO FIREBASE
+      ========================= */
 
       try {
 
@@ -384,6 +449,7 @@ if (contributionForm) {
         message.textContent =
           `JazakAllah khair! ${format(count)} Darood Pak added.`;
 
+
         message.style.color =
           "#0d5c4b";
 
@@ -395,6 +461,7 @@ if (contributionForm) {
           error
         );
 
+
         message.textContent =
           "Something went wrong. Please try again.";
 
@@ -404,9 +471,9 @@ if (contributionForm) {
         button.disabled =
           false;
 
+
         button.textContent =
           "Add My Contribution";
-
       }
 
     }
@@ -420,15 +487,23 @@ if (contributionForm) {
 ========================= */
 
 function init() {
+
+  // Start Firebase realtime listener
   watchContributions();
 
+
+  // Start countdown
   updateCountdown();
 
+
+  // Update countdown every second
   setInterval(
     updateCountdown,
     1000
   );
 }
+
+
 /* =========================
    START
 ========================= */
